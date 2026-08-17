@@ -1,0 +1,402 @@
+{
+    "model_name": "XGBoost",
+    "model_performance": {
+        "random_forest": {
+            "r2": 0.9689285218238227,
+            "mae": 0.06297939321685644,
+            "rmse": 0.09692799212401534
+        },
+        "xgboost": {
+            "r2": 0.9782555465144958,
+            "mae": 0.05040687668491418,
+            "rmse": 0.08108537087313454
+        }
+    },
+    "feature_importance": [
+        {
+            "feature": "Rainfall_mm",
+            "importance": 0.004008789546787739
+        },
+        {
+            "feature": "Avg_Temp_C",
+            "importance": 0.0180107019841671
+        },
+        {
+            "feature": "Solar_Radiation_MJ_m2",
+            "importance": 0.008788260631263256
+        },
+        {
+            "feature": "Root_Zone_Soil_Wetness",
+            "importance": 0.0140704195946455
+        },
+        {
+            "feature": "Lag_1",
+            "importance": 0.6881858110427856
+        },
+        {
+            "feature": "Lag_2",
+            "importance": 0.1847316175699234
+        },
+        {
+            "feature": "Lag_3",
+            "importance": 0.08220435678958893
+        }
+    ],
+    "actual_vs_predicted": [
+        {
+            "index": 0,
+            "actual": -34.22,
+            "predicted": -34.247562408447266
+        },
+        {
+            "index": 1,
+            "actual": -34.205,
+            "predicted": -34.23558044433594
+        },
+        {
+            "index": 2,
+            "actual": -34.1875,
+            "predicted": -34.22325897216797
+        },
+        {
+            "index": 3,
+            "actual": -34.17,
+            "predicted": -34.20185089111328
+        },
+        {
+            "index": 4,
+            "actual": -34.155,
+            "predicted": -34.17885971069336
+        },
+        {
+            "index": 5,
+            "actual": -34.14,
+            "predicted": -34.17351531982422
+        },
+        {
+            "index": 6,
+            "actual": -34.125,
+            "predicted": -34.15563201904297
+        },
+        {
+            "index": 7,
+            "actual": -34.11,
+            "predicted": -34.150081634521484
+        },
+        {
+            "index": 8,
+            "actual": -34.0975,
+            "predicted": -34.13351821899414
+        },
+        {
+            "index": 9,
+            "actual": -34.0825,
+            "predicted": -34.115360260009766
+        },
+        {
+            "index": 10,
+            "actual": -34.0775,
+            "predicted": -34.115936279296875
+        },
+        {
+            "index": 11,
+            "actual": -32.195,
+            "predicted": -32.287681579589844
+        },
+        {
+            "index": 12,
+            "actual": -32.5475,
+            "predicted": -32.69411849975586
+        },
+        {
+            "index": 13,
+            "actual": -32.6425,
+            "predicted": -32.63398742675781
+        },
+        {
+            "index": 14,
+            "actual": -32.43,
+            "predicted": -32.51382827758789
+        },
+        {
+            "index": 15,
+            "actual": -32.3025,
+            "predicted": -32.28424835205078
+        },
+        {
+            "index": 16,
+            "actual": -33.27,
+            "predicted": -33.305564880371094
+        },
+        {
+            "index": 17,
+            "actual": -33.7975,
+            "predicted": -33.79568099975586
+        },
+        {
+            "index": 18,
+            "actual": -34.16,
+            "predicted": -34.15932846069336
+        },
+        {
+            "index": 19,
+            "actual": -34.26,
+            "predicted": -34.250755310058594
+        },
+        {
+            "index": 20,
+            "actual": -34.0375,
+            "predicted": -34.04182434082031
+        },
+        {
+            "index": 21,
+            "actual": -33.635,
+            "predicted": -33.66797637939453
+        },
+        {
+            "index": 22,
+            "actual": -34.02,
+            "predicted": -34.03877258300781
+        },
+        {
+            "index": 23,
+            "actual": -34.0075,
+            "predicted": -34.032711029052734
+        },
+        {
+            "index": 24,
+            "actual": -33.9975,
+            "predicted": -34.03182601928711
+        },
+        {
+            "index": 25,
+            "actual": -33.99,
+            "predicted": -34.030479431152344
+        },
+        {
+            "index": 26,
+            "actual": -33.98,
+            "predicted": -34.02403259277344
+        },
+        {
+            "index": 27,
+            "actual": -33.9675,
+            "predicted": -34.00189971923828
+        },
+        {
+            "index": 28,
+            "actual": -33.955,
+            "predicted": -33.98868942260742
+        },
+        {
+            "index": 29,
+            "actual": -33.94,
+            "predicted": -33.98402404785156
+        },
+        {
+            "index": 30,
+            "actual": -33.93,
+            "predicted": -33.960845947265625
+        },
+        {
+            "index": 31,
+            "actual": -33.9175,
+            "predicted": -33.95368957519531
+        },
+        {
+            "index": 32,
+            "actual": -33.9075,
+            "predicted": -33.957027435302734
+        },
+        {
+            "index": 33,
+            "actual": -33.9025,
+            "predicted": -33.94545364379883
+        },
+        {
+            "index": 34,
+            "actual": -33.8975,
+            "predicted": -33.94637680053711
+        },
+        {
+            "index": 35,
+            "actual": -33.8925,
+            "predicted": -33.909873962402344
+        },
+        {
+            "index": 36,
+            "actual": -33.8875,
+            "predicted": -33.875675201416016
+        },
+        {
+            "index": 37,
+            "actual": -33.88,
+            "predicted": -33.87791061401367
+        },
+        {
+            "index": 38,
+            "actual": -33.88,
+            "predicted": -33.86626052856445
+        },
+        {
+            "index": 39,
+            "actual": -33.8825,
+            "predicted": -33.866153717041016
+        },
+        {
+            "index": 40,
+            "actual": -32.2125,
+            "predicted": -32.211212158203125
+        },
+        {
+            "index": 41,
+            "actual": -33.2725,
+            "predicted": -32.77447509765625
+        },
+        {
+            "index": 42,
+            "actual": -32.6475,
+            "predicted": -32.61155700683594
+        },
+        {
+            "index": 43,
+            "actual": -32.43,
+            "predicted": -32.42097854614258
+        },
+        {
+            "index": 44,
+            "actual": -32.3125,
+            "predicted": -32.27876663208008
+        },
+        {
+            "index": 45,
+            "actual": -33.2425,
+            "predicted": -33.23080825805664
+        },
+        {
+            "index": 46,
+            "actual": -33.81,
+            "predicted": -33.807228088378906
+        },
+        {
+            "index": 47,
+            "actual": -34.16,
+            "predicted": -34.168304443359375
+        },
+        {
+            "index": 48,
+            "actual": -34.27,
+            "predicted": -34.25185012817383
+        },
+        {
+            "index": 49,
+            "actual": -34.0275,
+            "predicted": -34.038597106933594
+        },
+        {
+            "index": 50,
+            "actual": -33.6125,
+            "predicted": -33.63002395629883
+        },
+        {
+            "index": 51,
+            "actual": -33.5875,
+            "predicted": -33.6185188293457
+        },
+        {
+            "index": 52,
+            "actual": -33.56,
+            "predicted": -33.6185188293457
+        },
+        {
+            "index": 53,
+            "actual": -33.5375,
+            "predicted": -33.6185188293457
+        },
+        {
+            "index": 54,
+            "actual": -33.5125,
+            "predicted": -33.64176559448242
+        },
+        {
+            "index": 55,
+            "actual": -33.4875,
+            "predicted": -33.502376556396484
+        },
+        {
+            "index": 56,
+            "actual": -33.4625,
+            "predicted": -33.49779510498047
+        },
+        {
+            "index": 57,
+            "actual": -33.4375,
+            "predicted": -33.501319885253906
+        },
+        {
+            "index": 58,
+            "actual": -33.4175,
+            "predicted": -33.492000579833984
+        },
+        {
+            "index": 59,
+            "actual": -33.395,
+            "predicted": -33.47494125366211
+        },
+        {
+            "index": 60,
+            "actual": -33.375,
+            "predicted": -33.46968460083008
+        },
+        {
+            "index": 61,
+            "actual": -33.3575,
+            "predicted": -33.44822311401367
+        },
+        {
+            "index": 62,
+            "actual": -33.35,
+            "predicted": -33.44178009033203
+        },
+        {
+            "index": 63,
+            "actual": -33.34,
+            "predicted": -33.393104553222656
+        },
+        {
+            "index": 64,
+            "actual": -33.3375,
+            "predicted": -33.444156646728516
+        },
+        {
+            "index": 65,
+            "actual": -33.3325,
+            "predicted": -33.419403076171875
+        },
+        {
+            "index": 66,
+            "actual": -33.33,
+            "predicted": -33.40397262573242
+        },
+        {
+            "index": 67,
+            "actual": -33.32,
+            "predicted": -33.41228103637695
+        },
+        {
+            "index": 68,
+            "actual": -33.31,
+            "predicted": -33.42365646362305
+        },
+        {
+            "index": 69,
+            "actual": -33.32,
+            "predicted": -33.430145263671875
+        },
+        {
+            "index": 70,
+            "actual": -33.3225,
+            "predicted": -33.43132400512695
+        }
+    ]
+}
