@@ -11,6 +11,11 @@ function Prediction() {
     temperature: "",
     soil: "",
     radiation: "",
+
+    // Previous groundwater observations
+    lag1: "",
+    lag2: "",
+    lag3: "",
   });
 
   // Single prediction
@@ -46,6 +51,11 @@ function Prediction() {
       temperature: Number(formData.temperature),
       soil: Number(formData.soil),
       radiation: Number(formData.radiation),
+
+      // Actual previous groundwater levels
+      lag1: Number(formData.lag1),
+      lag2: Number(formData.lag2),
+      lag3: Number(formData.lag3),
     };
   };
 
@@ -153,8 +163,9 @@ function Prediction() {
           </h1>
 
           <p>
-            Enter the environmental conditions to generate
-            groundwater predictions for Varthur, Bengaluru.
+            Enter the environmental conditions and the observed
+            groundwater levels from the previous three days to
+            generate predictions for Varthur, Bengaluru.
           </p>
 
         </div>
@@ -183,7 +194,9 @@ function Prediction() {
           </div>
 
 
-          {/* FORM */}
+          {/* =========================
+              ENVIRONMENTAL INPUTS
+          ========================= */}
 
           <div className="form-grid">
 
@@ -286,6 +299,100 @@ function Prediction() {
 
 
           {/* =========================
+              PREVIOUS GROUNDWATER LEVELS
+          ========================= */}
+
+          <div className="form-header" style={{ marginTop: "30px" }}>
+
+            <div>
+              <h2>Previous Groundwater Levels</h2>
+
+              <p>
+                Enter the observed groundwater levels from the
+                previous three days.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div className="form-grid">
+
+            {/* Lag 1 */}
+
+            <div className="form-group">
+
+              <label>
+                Previous Day <span>(Lag 1, m)</span>
+              </label>
+
+              <input
+                type="number"
+                name="lag1"
+                value={formData.lag1}
+                onChange={handleChange}
+                placeholder="e.g. -31.42"
+                step="0.01"
+              />
+
+              <small>
+                Groundwater level on the previous day
+              </small>
+
+            </div>
+
+
+            {/* Lag 2 */}
+
+            <div className="form-group">
+
+              <label>
+                2 Days Ago <span>(Lag 2, m)</span>
+              </label>
+
+              <input
+                type="number"
+                name="lag2"
+                value={formData.lag2}
+                onChange={handleChange}
+                placeholder="e.g. -31.50"
+                step="0.01"
+              />
+
+              <small>
+                Groundwater level two days ago
+              </small>
+
+            </div>
+
+
+            {/* Lag 3 */}
+
+            <div className="form-group">
+
+              <label>
+                3 Days Ago <span>(Lag 3, m)</span>
+              </label>
+
+              <input
+                type="number"
+                name="lag3"
+                value={formData.lag3}
+                onChange={handleChange}
+                placeholder="e.g. -31.60"
+                step="0.01"
+              />
+
+              <small>
+                Groundwater level three days ago
+              </small>
+
+            </div>
+
+          </div>
+
+
+          {/* =========================
               TWO PREDICTION OPTIONS
           ========================= */}
 
@@ -307,7 +414,8 @@ function Prediction() {
 
                 <p>
                   Predict the groundwater level based on
-                  the current environmental conditions.
+                  environmental conditions and recent
+                  groundwater observations.
                 </p>
 
               </div>
@@ -341,7 +449,8 @@ function Prediction() {
 
                 <p>
                   Generate groundwater predictions for
-                  the next seven days using historical levels.
+                  the next seven days using recent observed
+                  groundwater levels.
                 </p>
 
               </div>
@@ -361,7 +470,9 @@ function Prediction() {
           </div>
 
 
-          {/* ERROR */}
+          {/* =========================
+              ERROR
+          ========================= */}
 
           {error && (
             <div className="error-message">

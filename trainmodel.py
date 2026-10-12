@@ -1,271 +1,357 @@
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
+from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 import pickle
-import os
+import numpy as np
 import json
+import pandas as pd
 
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
-from xgboost import XGBRegressor  
-
-# Create directories if they don't exist
-os.makedirs("model", exist_ok=True)
-
-# ================================
-# 1. LOAD DATA
-# ================================
-df = pd.read_csv(
-    "data/Varthur_Feature_Engineered.csv",
-    encoding="latin1"
-)
-
-# ================================
-# 2. CLEAN COLUMN NAMES
-# ================================
-df.columns = df.columns.str.strip().str.replace(" ", "_").str.replace(r"\(|\)", "", regex=True)
-
-# ================================
-# 3. PRE-PROCESSING & DATA TYPES
-# ================================
-df["Date"] = pd.to_datetime(df["Date"], errors='coerce')
-df = df.dropna(subset=["Date"])
-df = df.sort_values("Date")
-
-cols_to_fix = df.columns.drop("Date")
-df[cols_to_fix] = df[cols_to_fix].apply(pd.to_numeric, errors='coerce')
-
-df = df.ffill().bfill()
-
-# ================================
-# 4. FEATURE ENGINEERING
-# ================================
-df["year"] = df["Date"].dt.year
-df["month"] = df["Date"].dt.month
-df["day"] = df["Date"].dt.day
-df["day_of_week"] = df["Date"].dt.dayofweek
-
-df = df.dropna()
-
-# ================================
-# 5. SPLIT DATA (TIME-SERIES AWARE)
-# ================================
-y = df["GW_Level_m"]
-
-X = df[[
-    "Rainfall_mm",
-    "Avg_Temp_C",
-    "Solar_Radiation_MJ_m2",
-    "Root_Zone_Soil_Wetness",
-    "Lag_1",
-    "Lag_2",
-    "Lag_3"
-]]
-
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, shuffle=False
-)
-
-# ================================
-# 6. MODEL TRAINING
-# ================================
-
-# Random Forest
-rf_model = RandomForestRegressor(
-    n_estimators=300,
-    max_depth=12,
-    min_samples_leaf=2,
-    random_state=42,
-    n_jobs=-1
-)
-
-rf_model.fit(X_train, y_train)
-
-# XGBoost
-xgb_model = XGBRegressor(
-    n_estimators=300,
-    max_depth=6,
-    learning_rate=0.05,
-    subsample=0.8,
-    colsample_bytree=0.8,
-    random_state=42
-)
+app = Flask(__name__)
+CORS(app)
 
-xgb_model.fit(X_train, y_train)
 
-# ================================
-# 7. EVALUATION
-# ================================
+# ==========================================
+# LOAD MODEL
+# ==========================================
 
-def evaluate(y_true, y_pred, name):
+model = pickle.load(open("model/model.pkl", "rb"))
 
-    r2 = r2_score(y_true, y_pred)
-    mae = mean_absolute_error(y_true, y_pred)
-    rmse = np.sqrt(mean_squared_error(y_true, y_pred))
 
-    print(f"\n--- {name} Performance ---")
-    print(f"R2 Score: {r2:.4f}")
-    print(f"MAE:      {mae:.4f}")
-    print(f"RMSE:     {rmse:.4f}")
+# ==========================================
+# LOAD ANALYTICS INFORMATION
+# ==========================================
 
-    return r2, mae, rmse, y_pred
+with open("model/analytics.json", "r") as f:
+    analytics = json.load(f)
 
-# Predictions
-rf_r2, rf_mae, rf_rmse, rf_pred = evaluate(
-    y_test,
-    rf_model.predict(X_test),
-    "Random Forest"
-)
 
-xgb_r2, xgb_mae, xgb_rmse, xgb_pred = evaluate(
-    y_test,
-    xgb_model.predict(X_test),
-    "XGBoost"
-)
+# ==========================================
+# HOME ROUTE
+# ==========================================
 
-# ================================
-# 7.1 MODEL COMPARISON GRAPH
-# ================================
+@app.route("/")
+def home():
+    return render_template("index.html")
 
-labels = ["R²", "MAE", "RMSE"]
 
-rf_values = [rf_r2, rf_mae, rf_rmse]
-xgb_values = [xgb_r2, xgb_mae, xgb_rmse]
+# ==========================================
+# SINGLE-DAY PREDICTION
+# ==========================================
 
-x = np.arange(len(labels))
-width = 0.35
+@app.route("/predict", methods=["POST"])
+def predict():
 
-plt.figure(figsize=(8,5))
+    try:
 
-plt.bar(x - width/2, rf_values, width, label="Random Forest")
-plt.bar(x + width/2, xgb_values, width, label="XGBoost")
+        data = request.json
 
-plt.xticks(x, labels)
+        # ----------------------------------
+        # Current-day environmental inputs
+        # ----------------------------------
 
-plt.ylabel("Score")
+        rainfall = float(data["rainfall"])
+        temperature = float(data["temperature"])
+        soil = float(data["soil"])
+        radiation = float(data["radiation"])
 
-plt.title("Model Comparison: Random Forest vs XGBoost")
+        # ----------------------------------
+        # Actual groundwater observations
+        # from previous three days
+        # ----------------------------------
 
-plt.legend()
+        lag1 = float(data["lag1"])
+        lag2 = float(data["lag2"])
+        lag3 = float(data["lag3"])
 
-plt.savefig("comparison_graph.png")
+        # ----------------------------------
+        # Create feature vector
+        #
+        # IMPORTANT:
+        # Order must be identical to training
+        #
+        # Rainfall
+        # Avg_Temp
+        # Solar Radiation
+        # Soil Wetness
+        # Lag 1
+        # Lag 2
+        # Lag 3
+        # ----------------------------------
 
-plt.show()
+        features = np.array([
+            rainfall,
+            temperature,
+            radiation,
+            soil,
+            lag1,
+            lag2,
+            lag3
+        ]).reshape(1, -1)
 
-# ================================
-# 8. SELECT BEST MODEL
-# ================================
+        # ----------------------------------
+        # Prediction
+        # ----------------------------------
 
-if xgb_r2 > rf_r2:
-    best_model = xgb_model
-    best_pred = xgb_pred
-    best_name = "XGBoost"
-else:
-    best_model = rf_model
-    best_pred = rf_pred
-    best_name = "Random Forest"
+        prediction = model.predict(features)[0]
 
-print(f"\nBest Model Selected: {best_name}")
+        prediction = float(prediction)
 
-# ================================
-# 9. ACTUAL VS PREDICTED GRAPH
-# ================================
+        # ----------------------------------
+        # Status classification
+        # ----------------------------------
 
-plt.figure(figsize=(10,5))
+        if prediction > -25:
 
-plt.plot(y_test.values, label="Actual", alpha=0.6)
+            status = "High (Good Water Level)"
 
-plt.plot(
-    best_pred,
-    label=f"Predicted ({best_name})",
-    linestyle='--'
-)
+        elif prediction > -32:
 
-plt.xlabel("Test Samples")
+            status = "Moderate"
 
-plt.ylabel("Groundwater Level")
+        else:
 
-plt.title("Actual vs Predicted Groundwater Levels")
+            status = "Low (Deep Water Level)"
 
-plt.legend()
+        # ----------------------------------
+        # Return prediction
+        # ----------------------------------
 
-plt.savefig("actual_vs_predicted.png")
+        return jsonify({
 
-plt.show()
+            "prediction": prediction,
 
-# ================================
-# 10. FEATURE IMPORTANCE GRAPH
-# ================================
+            "status": status,
 
-importance = pd.Series(
-    best_model.feature_importances_,
-    index=X.columns
-)
+            "input_lags": {
+                "lag1": lag1,
+                "lag2": lag2,
+                "lag3": lag3
+            }
 
-plt.figure(figsize=(8,5))
+        })
 
-importance.sort_values().plot(
-    kind='barh',
-    title=f"{best_name} Feature Importance"
-)
+    except Exception as e:
 
-plt.xlabel("Importance Score")
+        return jsonify({
+            "error": str(e)
+        }), 400
 
-plt.savefig("feature_importance.png")
 
-plt.show()
+# ==========================================
+# SEVEN-DAY FORECAST
+# ==========================================
 
-# ================================
-# 11. SAVE BEST MODEL
-# ================================
+@app.route("/predict7", methods=["POST"])
+def predict7():
 
-with open("model/model.pkl", "wb") as f:
-    pickle.dump(best_model, f)
+    try:
 
-print("\nModel saved successfully!")
+        data = request.json
 
-# ================================
-# 12. SAVE ANALYTICS DATA
-# ================================
+        # ----------------------------------
+        # Environmental inputs
+        # ----------------------------------
 
-analytics_data = {
-    "model_name": best_name,
+        rainfall = float(data["rainfall"])
+        temperature = float(data["temperature"])
+        radiation = float(data["radiation"])
+        soil = float(data["soil"])
 
-    "model_performance": {
-        "random_forest": {
-            "r2": float(rf_r2),
-            "mae": float(rf_mae),
-            "rmse": float(rf_rmse)
-        },
-        "xgboost": {
-            "r2": float(xgb_r2),
-            "mae": float(xgb_mae),
-            "rmse": float(xgb_rmse)
-        }
-    },
+        # ----------------------------------
+        # Actual previous groundwater levels
+        # ----------------------------------
 
-    "feature_importance": [
-        {
-            "feature": str(feature),
-            "importance": float(value)
-        }
-        for feature, value in importance.items()
-    ],
+        lag1 = float(data["lag1"])
+        lag2 = float(data["lag2"])
+        lag3 = float(data["lag3"])
 
-    "actual_vs_predicted": [
-        {
-            "index": int(i),
-            "actual": float(actual),
-            "predicted": float(predicted)
-        }
-        for i, (actual, predicted)
-        in enumerate(zip(y_test.values, best_pred))
-    ]
-}
+        # ----------------------------------
+        # Temporary history
+        #
+        # We DO NOT modify the original
+        # observations supplied by the user.
+        # ----------------------------------
 
-with open("model/analytics.json", "w") as f:
-    json.dump(analytics_data, f, indent=4)
+        temp_history = [lag3, lag2, lag1]
 
-print("Analytics data saved successfully!")
+        predictions = []
+
+        # ----------------------------------
+        # Recursive 7-day forecasting
+        # ----------------------------------
+
+        for i in range(7):
+
+            current_lag1 = temp_history[-1]
+            current_lag2 = temp_history[-2]
+            current_lag3 = temp_history[-3]
+
+            features = np.array([
+
+                rainfall,
+                temperature,
+                radiation,
+                soil,
+
+                current_lag1,
+                current_lag2,
+                current_lag3
+
+            ]).reshape(1, -1)
+
+            pred = model.predict(features)[0]
+
+            pred = float(pred)
+
+            predictions.append(pred)
+
+            # ----------------------------------
+            # Use prediction as next lag value
+            # ----------------------------------
+
+            temp_history.append(pred)
+
+        # ----------------------------------
+        # Return forecast
+        # ----------------------------------
+
+        return jsonify({
+
+            "forecast": predictions,
+
+            "initial_lags": {
+                "lag1": lag1,
+                "lag2": lag2,
+                "lag3": lag3
+            }
+
+        })
+
+    except Exception as e:
+
+        return jsonify({
+            "error": str(e)
+        }), 400
+
+
+# ==========================================
+# HISTORICAL DATA API
+# ==========================================
+
+@app.route("/api/historical-data", methods=["GET"])
+def historical_data():
+
+    try:
+
+        # ----------------------------------
+        # Load actual dataset
+        # ----------------------------------
+
+        df = pd.read_csv(
+            "data/Varthur_Feature_Engineered.csv",
+            encoding="latin1"
+        )
+
+        # ----------------------------------
+        # Clean column names
+        # Same preprocessing as training
+        # ----------------------------------
+
+        df.columns = (
+            df.columns
+            .str.strip()
+            .str.replace(" ", "_")
+            .str.replace(r"\(|\)", "", regex=True)
+        )
+
+        # ----------------------------------
+        # Convert Date
+        # ----------------------------------
+
+        df["Date"] = pd.to_datetime(
+            df["Date"],
+            errors="coerce"
+        )
+
+        df = df.dropna(subset=["Date"])
+
+        df = df.sort_values("Date")
+
+        # ----------------------------------
+        # Select required columns
+        # ----------------------------------
+
+        columns = [
+
+            "Date",
+            "GW_Level_m",
+            "Rainfall_mm",
+            "Avg_Temp_C",
+            "Root_Zone_Soil_Wetness",
+            "Solar_Radiation_MJ_m2"
+
+        ]
+
+        df = df[columns]
+
+        # ----------------------------------
+        # Rename for frontend
+        # ----------------------------------
+
+        df = df.rename(columns={
+
+            "Date": "date",
+
+            "GW_Level_m": "groundwater",
+
+            "Rainfall_mm": "rainfall",
+
+            "Avg_Temp_C": "temperature",
+
+            "Root_Zone_Soil_Wetness": "soil",
+
+            "Solar_Radiation_MJ_m2": "radiation"
+
+        })
+
+        # ----------------------------------
+        # Convert NaN → None
+        # ----------------------------------
+
+        df = df.where(
+            pd.notnull(df),
+            None
+        )
+
+        # ----------------------------------
+        # Convert to JSON
+        # ----------------------------------
+
+        data = df.to_dict(
+            orient="records"
+        )
+
+        return jsonify(data)
+
+    except Exception as e:
+
+        print(
+            "Historical data error:",
+            e
+        )
+
+        return jsonify({
+
+            "error": str(e)
+
+        }), 500
+
+
+# ==========================================
+# RUN APPLICATION
+# ==========================================
+
+if __name__ == "__main__":
+
+    app.run(
+        debug=True
+    )
