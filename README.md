@@ -250,7 +250,3 @@ These results should be verified against the final training and test evaluation 
 Information Science and Engineering
 
 GitHub: [Swara-k13](https://github.com/Swara-k13)
-
-## 📄 License
-
-Choose and add an appropriate open-source license before distributing the project for reuse.
