@@ -74,7 +74,7 @@ function Landing() {
           <div className="info-grid">
 
             <div className="info-card">
-              <div className="info-icon">📍</div>
+              <div className="info-icon"></div>
 
               <div>
                 <span>Study Area</span>
@@ -94,7 +94,7 @@ function Landing() {
 
 
             <div className="info-card">
-              <div className="info-icon">📅</div>
+              <div className="info-icon"></div>
 
               <div>
                 <span>Forecast</span>
