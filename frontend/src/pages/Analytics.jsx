@@ -45,8 +45,7 @@ function Analytics() {
       <nav className="navbar">
 
         <div className="logo">
-          <span className="logo-icon">💧</span>
-          <span>AquaForecast</span>
+          <span>GroundPulse</span>
         </div>
 
         <div className="analytics-nav">

@@ -1795,3 +1795,537 @@ body {
   }
 
 }
+
+/* ==============================
+   SCROLLING INFORMATION SECTIONS
+============================== */
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+.content-section {
+  padding: 110px 9%;
+  position: relative;
+}
+
+.about-section {
+  background: #f3f9fc;
+}
+
+.technology-section {
+  background: #ffffff;
+}
+
+.impact-section {
+  background: #f3f9fc;
+}
+
+.section-tag {
+  color: #1596b8;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 22px;
+}
+
+.content-section h2 {
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.2;
+  color: #12344a;
+  margin-bottom: 25px;
+}
+
+.content-section h2 span {
+  color: #1596b8;
+}
+
+.section-description {
+  max-width: 760px;
+  font-size: 16px;
+  line-height: 1.9;
+  color: #647987;
+  margin-bottom: 50px;
+}
+
+
+/* ABOUT GRID */
+
+.about-grid,
+.tech-grid,
+.impact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.about-card,
+.tech-card,
+.impact-card {
+  padding: 30px;
+  background: white;
+  border: 1px solid #e1edf2;
+  border-radius: 16px;
+  transition: 0.3s ease;
+}
+
+.about-card:hover,
+.tech-card:hover,
+.impact-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 12px 30px rgba(20, 90, 120, 0.09);
+}
+
+.about-card span,
+.tech-card span,
+.impact-card span {
+  font-size: 30px;
+}
+
+.about-card h3,
+.tech-card h3,
+.impact-card h3 {
+  font-size: 19px;
+  color: #173e54;
+  margin: 20px 0 12px;
+}
+
+.about-card p,
+.tech-card p,
+.impact-card p {
+  color: #71838f;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+
+/* TECHNOLOGY GRID */
+
+.tech-grid {
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 45px;
+}
+
+.tech-card {
+  background: #f7fbfd;
+}
+
+
+/* DATA SOURCES */
+
+.data-box {
+  padding: 35px;
+  background: #eaf5fa;
+  border-radius: 18px;
+}
+
+.data-box h3 {
+  color: #123c53;
+  font-size: 22px;
+  margin-bottom: 28px;
+}
+
+.data-items {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.data-items strong {
+  color: #148bab;
+  font-size: 15px;
+}
+
+.data-items p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #657c89;
+  margin-top: 10px;
+}
+
+
+/* IMPACT */
+
+.impact-card {
+  background: white;
+}
+
+.impact-cta {
+  margin-top: 55px;
+  padding: 45px;
+  background: #123e54;
+  border-radius: 20px;
+  color: white;
+}
+
+.impact-cta h3 {
+  font-size: 25px;
+  margin-bottom: 12px;
+}
+
+.impact-cta p {
+  color: #c1dce7;
+  margin-bottom: 25px;
+}
+
+.impact-cta .predict-button {
+  display: inline-flex;
+  width: auto;
+  padding: 15px 25px;
+}
+
+
+/* FOOTER */
+
+.footer {
+  padding: 40px 9%;
+  background: #102f42;
+  color: white;
+  text-align: center;
+}
+
+.footer p {
+  margin: 15px 0;
+  color: #b5cbd5;
+  font-size: 14px;
+}
+
+.footer > span {
+  color: #5bc1d9;
+  font-size: 13px;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .about-grid,
+  .tech-grid,
+  .impact-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .data-items {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .content-section {
+    padding: 75px 6%;
+  }
+
+  .about-grid,
+  .tech-grid,
+  .impact-grid,
+  .data-items {
+    grid-template-columns: 1fr;
+  }
+
+  .impact-cta {
+    padding: 28px;
+  }
+
+  .navbar {
+    flex-wrap: wrap;
+  }
+
+  .nav-links {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+}
+
+/* =====================================
+   AQUAFORECAST - DARK EMERALD THEME
+===================================== */
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+/* All information sections */
+.content-section {
+  padding: 110px 9%;
+  position: relative;
+  background: #061D1B;
+  color: #F3F7F6;
+}
+
+/* Remove previous light backgrounds */
+.about-section,
+.technology-section,
+.impact-section {
+  background: #061D1B;
+}
+
+/* Section labels */
+.section-tag {
+  color: #5CCFC0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 22px;
+}
+
+/* Section headings */
+.content-section h2 {
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.2;
+  color: #F3F7F6;
+  margin-bottom: 25px;
+  font-weight: 750;
+}
+
+.content-section h2 span {
+  color: #5CCFC0;
+}
+
+/* Description */
+.section-description {
+  max-width: 780px;
+  font-size: 16px;
+  line-height: 1.9;
+  color: #A5BBB6;
+  margin-bottom: 50px;
+}
+
+
+/* =====================================
+   ABOUT / TECHNOLOGY / IMPACT CARDS
+===================================== */
+
+.about-grid,
+.tech-grid,
+.impact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.about-card,
+.tech-card,
+.impact-card {
+  padding: 32px;
+  background: #112D2A;
+  border: 1px solid #24423D;
+  border-radius: 18px;
+  transition: all 0.3s ease;
+}
+
+.about-card:hover,
+.tech-card:hover,
+.impact-card:hover {
+  transform: translateY(-7px);
+  border-color: #5CCFC0;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+/* Card icons */
+.about-card span,
+.tech-card span,
+.impact-card span {
+  font-size: 30px;
+}
+
+/* Card headings */
+.about-card h3,
+.tech-card h3,
+.impact-card h3 {
+  font-size: 19px;
+  color: #F3F7F6;
+  margin: 20px 0 12px;
+}
+
+/* Card descriptions */
+.about-card p,
+.tech-card p,
+.impact-card p {
+  color: #A5BBB6;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+
+/* =====================================
+   TECHNOLOGY SECTION
+===================================== */
+
+.tech-grid {
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 45px;
+}
+
+.tech-card {
+  background: #112D2A;
+}
+
+/* =====================================
+   ENVIRONMENTAL DATA BOX
+===================================== */
+
+.data-box {
+  padding: 35px;
+  background: #0D2925;
+  border: 1px solid #24423D;
+  border-radius: 18px;
+}
+
+.data-box h3 {
+  color: #F3F7F6;
+  font-size: 22px;
+  margin-bottom: 28px;
+}
+
+.data-items {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.data-items strong {
+  color: #5CCFC0;
+  font-size: 15px;
+}
+
+.data-items p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #A5BBB6;
+  margin-top: 10px;
+}
+
+
+/* =====================================
+   WHY IT MATTERS
+===================================== */
+
+.impact-card {
+  background: #112D2A;
+}
+
+.impact-cta {
+  margin-top: 55px;
+  padding: 45px;
+  background: linear-gradient(135deg, #123E38, #0D2925);
+  border: 1px solid #315B50;
+  border-radius: 20px;
+  color: white;
+}
+
+.impact-cta h3 {
+  color: #F3F7F6;
+  font-size: 25px;
+  margin-bottom: 12px;
+}
+
+.impact-cta p {
+  color: #A5BBB6;
+  margin-bottom: 25px;
+}
+
+.impact-cta .predict-button {
+  display: inline-flex;
+  width: auto;
+  padding: 15px 25px;
+  background: #5CCFC0;
+  color: #06201D;
+  border: none;
+}
+
+
+/* =====================================
+   FOOTER
+===================================== */
+
+.footer {
+  padding: 40px 9%;
+  background: #041715;
+  border-top: 1px solid #24423D;
+  color: white;
+  text-align: center;
+}
+
+.footer p {
+  margin: 15px 0;
+  color: #A5BBB6;
+  font-size: 14px;
+}
+
+.footer > span {
+  color: #5CCFC0;
+  font-size: 13px;
+}
+
+
+/* =====================================
+   RESPONSIVE DESIGN
+===================================== */
+
+@media (max-width: 900px) {
+  .about-grid,
+  .tech-grid,
+  .impact-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .data-items {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .content-section {
+    padding: 75px 6%;
+  }
+
+  .about-grid,
+  .tech-grid,
+  .impact-grid,
+  .data-items {
+    grid-template-columns: 1fr;
+  }
+
+  .impact-cta {
+    padding: 28px;
+  }
+}
+
+/* ANALYTICS NAVIGATION BUTTON */
+
+.nav-links .analytics-button {
+  appearance: none;
+  -webkit-appearance: none;
+
+  border: none;
+  outline: none;
+  box-shadow: none;
+
+  background: transparent;
+  color: #aebebe;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+
+  padding: 0;
+  margin: 0;
+
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.nav-links .analytics-button:hover {
+  background: transparent;
+  color: #65cfc0;
+}
+
+.nav-links .analytics-button:focus,
+.nav-links .analytics-button:active {
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+}
