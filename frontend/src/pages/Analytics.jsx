@@ -1,9 +1,10 @@
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import GroundwaterChart from "../components/GroundwaterChart";
-
+import EnvironmentalInsights from "../components/EnvironmentalInsights.jsx";
 import "../App.css";
 
 function Analytics() {
@@ -20,7 +21,11 @@ function Analytics() {
           "http://127.0.0.1:5000/api/historical-data"
         );
 
-        console.log("Historical data:", response.data);
+       console.log("Historical data:", response.data);
+
+console.log("Available columns:", Object.keys(response.data[0] || {}));
+
+console.log("First record:", response.data[0]);
 
         setHistoricalData(response.data);
       } catch (err) {
@@ -188,6 +193,19 @@ function Analytics() {
               </div>
 
             </div>
+
+          )}
+
+
+        {/* ================= ENVIRONMENTAL INSIGHTS ================= */}
+
+        {!loading &&
+          !error &&
+          historicalData.length > 0 && (
+
+            <EnvironmentalInsights
+              data={historicalData}
+            />
 
           )}
 

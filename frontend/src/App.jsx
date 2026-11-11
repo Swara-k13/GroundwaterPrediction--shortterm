@@ -8,6 +8,7 @@ import {
 
 import Prediction from "./pages/Prediction";
 import Analytics from "./pages/Analytics";
+import Chatbot from "./components/Chatbot";
 import "./App.css";
 
 function Landing() {
@@ -446,6 +447,8 @@ function Landing() {
 function App() {
   return (
     <BrowserRouter>
+        <Chatbot />
+
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/predict" element={<Prediction />} />
