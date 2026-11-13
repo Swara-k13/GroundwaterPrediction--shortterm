@@ -3693,3 +3693,271 @@ html {
     padding: 15px;
   }
 }
+/* ==========================================
+   PDF REPORT DOWNLOAD BUTTON
+========================================== */
+
+.report-download-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  padding: 24px 0 10px;
+  border-top: 1px solid rgba(101, 207, 192, 0.2);
+}
+
+.report-download-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  background: linear-gradient(135deg, #167d70, #65cfc0);
+  color: #071c1c;
+
+  border: 1px solid rgba(101, 207, 192, 0.5);
+  border-radius: 12px;
+
+  padding: 14px 28px;
+
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+
+  cursor: pointer;
+
+  box-shadow: 0 5px 18px rgba(101, 207, 192, 0.15);
+
+  transition: all 0.3s ease;
+}
+
+.report-download-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(101, 207, 192, 0.3);
+  background: linear-gradient(135deg, #65cfc0, #8ae2d5);
+}
+
+.report-download-button:active {
+  transform: translateY(0);
+}
+
+.report-download-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .report-download-button {
+    width: 100%;
+    padding: 13px 18px;
+    font-size: 14px;
+  }
+
+  .report-download-section {
+    padding-top: 18px;
+  }
+}
+
+/* ==========================================
+   ENVIRONMENTAL FEATURE VARIATION
+========================================== */
+
+.feature-variation-section {
+  width: 100%;
+  padding: 10px 0;
+}
+
+.feature-chart-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.feature-chart-heading h2 {
+  margin: 10px 0;
+}
+
+.feature-chart-heading p {
+  color: #94a3b8;
+  font-size: 14px;
+  margin-top: 8px;
+  line-height: 1.6;
+}
+
+.feature-select {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  background: #102b28;
+  color: #e2e8f0;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+}
+
+.feature-select option {
+  background: #102b28;
+  color: white;
+}
+
+.feature-chart-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.feature-chart-title h3 {
+  font-size: 17px;
+  margin: 0;
+}
+
+.feature-chart-title span {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.feature-svg-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.feature-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  color: #94a3b8;
+}
+
+.feature-date-labels {
+  display: flex;
+  justify-content: space-between;
+  color: #94a3b8;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.feature-statistics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.feature-statistics div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 18px;
+  background: rgba(16, 185, 129, 0.07);
+  border: 1px solid rgba(52, 211, 153, 0.12);
+  border-radius: 12px;
+}
+
+.feature-statistics span {
+  color: #94a3b8;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.feature-statistics strong {
+  font-size: 23px;
+  color: #6ee7b7;
+}
+
+.feature-statistics small {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.feature-record-count {
+  color: #94a3b8;
+  font-size: 12px;
+  margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+  .feature-statistics {
+    gap: 8px;
+  }
+
+  .feature-statistics div {
+    padding: 12px 8px;
+  }
+
+  .feature-statistics strong {
+    font-size: 17px;
+  }
+
+  .feature-statistics span {
+    font-size: 9px;
+  }
+
+  .feature-select {
+    width: 100%;
+  }
+}
+
+/* Hover value display */
+
+.feature-hover-info {
+  min-height: 38px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 9px 14px;
+  margin-bottom: 12px;
+  background: rgba(16, 185, 129, 0.07);
+  border: 1px solid rgba(52, 211, 153, 0.15);
+  border-radius: 9px;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.feature-hover-info strong {
+  font-size: 14px;
+}
+
+.feature-svg-wrapper {
+  width: 100%;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+.feature-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  color: #94a3b8;
+  overflow: visible;
+}
+.analytics-download-btn {
+  margin-top: 20px;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 8px;
+  background: #167d70;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.analytics-download-btn:hover {
+  background: #0f6258;
+  transform: translateY(-2px);
+}
+
+.analytics-download-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}

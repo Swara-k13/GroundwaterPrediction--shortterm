@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import GroundwaterChart from "../components/GroundwaterChart";
 import EnvironmentalInsights from "../components/EnvironmentalInsights.jsx";
+import FeatureVariation from "../components/FeatureVariation";
 import "../App.css";
 
 function Analytics() {
@@ -13,7 +14,9 @@ function Analytics() {
   const [historicalData, setHistoricalData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [downloadingReport, setDownloadingReport] = useState(false);
 
+  // Fetch historical groundwater data
   useEffect(() => {
     const fetchHistoricalData = async () => {
       try {
@@ -21,11 +24,12 @@ function Analytics() {
           "http://127.0.0.1:5000/api/historical-data"
         );
 
-       console.log("Historical data:", response.data);
-
-console.log("Available columns:", Object.keys(response.data[0] || {}));
-
-console.log("First record:", response.data[0]);
+        console.log("Historical data:", response.data);
+        console.log(
+          "Available columns:",
+          Object.keys(response.data[0] || {})
+        );
+        console.log("First record:", response.data[0]);
 
         setHistoricalData(response.data);
       } catch (err) {
@@ -41,6 +45,48 @@ console.log("First record:", response.data[0]);
 
     fetchHistoricalData();
   }, []);
+
+  // Download Analytics PDF
+  const downloadAnalyticsReport = async () => {
+    try {
+      setDownloadingReport(true);
+
+      const response = await axios.post(
+        "http://127.0.0.1:5000/api/download-analytics-report",
+        {},
+        {
+          responseType: "blob"
+        }
+      );
+
+      const pdfBlob = new Blob(
+        [response.data],
+        { type: "application/pdf" }
+      );
+
+      const url = window.URL.createObjectURL(pdfBlob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "GroundPulse_Analytics_Report.pdf";
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      window.URL.revokeObjectURL(url);
+
+    } catch (err) {
+      console.error("Analytics PDF error:", err);
+
+      alert(
+        "Unable to download Analytics PDF. Please check whether Flask is running and the report route is configured."
+      );
+
+    } finally {
+      setDownloadingReport(false);
+    }
+  };
 
   return (
     <div className="analytics-page">
@@ -67,7 +113,6 @@ console.log("First record:", response.data[0]);
 
       </nav>
 
-
       {/* ================= MAIN ================= */}
 
       <main className="analytics-container">
@@ -92,8 +137,19 @@ console.log("First record:", response.data[0]);
             conditions for Varthur, Bengaluru.
           </p>
 
-        </section>
+          {/* ANALYTICS PDF DOWNLOAD BUTTON */}
 
+          <button
+            className="analytics-download-btn"
+            onClick={downloadAnalyticsReport}
+            disabled={downloadingReport}
+          >
+            {downloadingReport
+              ? "Generating Report..."
+              : "Download Analytics PDF"}
+          </button>
+
+        </section>
 
         {/* ================= GRAPH CARD ================= */}
 
@@ -117,7 +173,6 @@ console.log("First record:", response.data[0]);
 
           </div>
 
-
           {/* LOADING */}
 
           {loading && (
@@ -126,7 +181,6 @@ console.log("First record:", response.data[0]);
             </div>
           )}
 
-
           {/* ERROR */}
 
           {!loading && error && (
@@ -134,7 +188,6 @@ console.log("First record:", response.data[0]);
               ⚠️ {error}
             </div>
           )}
-
 
           {/* GRAPH */}
 
@@ -145,7 +198,6 @@ console.log("First record:", response.data[0]);
                 data={historicalData}
               />
             )}
-
 
           {/* NO DATA */}
 
@@ -158,7 +210,6 @@ console.log("First record:", response.data[0]);
             )}
 
         </section>
-
 
         {/* ================= DATA SUMMARY ================= */}
 
@@ -196,6 +247,21 @@ console.log("First record:", response.data[0]);
 
           )}
 
+        {/* ================= FEATURE VARIATION ================= */}
+
+        {!loading &&
+          !error &&
+          historicalData.length > 0 && (
+
+            <section className="analytics-card large">
+
+              <FeatureVariation
+                data={historicalData}
+              />
+
+            </section>
+
+          )}
 
         {/* ================= ENVIRONMENTAL INSIGHTS ================= */}
 

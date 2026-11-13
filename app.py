@@ -8,6 +8,9 @@ import os
 from dotenv import load_dotenv
 from groq import Groq
 import traceback
+from flask import request, jsonify, send_file
+from generate_groundwater_report import generate_groundwater_report
+from generate_analytics import generate_analytics
 load_dotenv()
 app = Flask(__name__)
 CORS(app)
@@ -23,8 +26,6 @@ with open("model/analytics.json", "r") as f:
 @app.route("/")
 def home():
     return render_template("index.html")
-
-# Prediction route
 
 # Prediction route
 @app.route("/predict", methods=["POST"])
@@ -334,6 +335,107 @@ def chat():
         return jsonify({
              "error": str(e)
                }), 500
+
+@app.route("/api/download-report", methods=["POST"])
+def download_report():
+    try:
+        data = request.get_json(silent=True) or {}
+        forecast = data.get("forecast", [])
+
+        if not isinstance(forecast, list) or len(forecast) != 7:
+            return jsonify({
+                "error": "Please generate a valid 7-day forecast first."
+            }), 400
+
+        forecast = [float(value) for value in forecast]
+
+        report = generate_groundwater_report(
+            forecast=forecast,
+            prediction_type="7-Day Forecast"
+        )
+
+        report.seek(0)
+
+        return send_file(
+            report,
+            mimetype="application/pdf",
+            as_attachment=True,
+            download_name="GroundPulse_7_Day_Report.pdf"
+        )
+
+    except (ValueError, TypeError):
+        return jsonify({"error": "Invalid forecast values."}), 400
+
+    except Exception as e:
+        print("PDF generation error:", e)
+        return jsonify({
+            "error": "Unable to generate PDF report."
+        }), 500
+
+
+@app.route("/api/download-analytics-report", methods=["POST"])
+def download_analytics_report():
+    try:
+        df = pd.read_csv(
+            "data/Varthur_Feature_Engineered.csv",
+            encoding="latin1"
+        )
+
+        df.columns = (
+            df.columns.str.strip()
+            .str.replace(" ", "_")
+            .str.replace(r"\(|\)", "", regex=True)
+        )
+
+        df["Date"] = pd.to_datetime(
+            df["Date"], errors="coerce"
+        )
+
+        columns = [
+            "Date",
+            "GW_Level_m",
+            "Rainfall_mm",
+            "Avg_Temp_C",
+            "Root_Zone_Soil_Wetness",
+            "Solar_Radiation_MJ_m2"
+        ]
+
+        df = df[columns].sort_values("Date")
+
+        df = df.rename(columns={
+            "Date": "date",
+            "GW_Level_m": "groundwater",
+            "Rainfall_mm": "rainfall",
+            "Avg_Temp_C": "temperature",
+            "Root_Zone_Soil_Wetness": "soil",
+            "Solar_Radiation_MJ_m2": "radiation"
+        })
+
+        df["date"] = df["date"].dt.strftime("%Y-%m-%d")
+
+        df = df.astype(object).where(
+            pd.notnull(df), None
+        )
+
+        records = df.to_dict(orient="records")
+
+        report = generate_analytics(records)
+        report.seek(0)
+
+        return send_file(
+            report,
+            mimetype="application/pdf",
+            as_attachment=True,
+            download_name="GroundPulse_Analytics_Report.pdf"
+        )
+
+    except Exception as e:
+        print("Analytics PDF error:", e)
+        traceback.print_exc()
+
+        return jsonify({
+            "error": "Unable to generate analytics report."
+        }), 500
 
 
 if __name__ == "__main__":
